@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ – FitFlow Performance Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* FAQ Specific Styles */
+        .faq-hero {
+            min-height: 40vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--primary) 50%, var(--secondary) 100%);
+        }
+        
+        .faq-hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1rem;
+        }
+        
+        .faq-hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .faq-item {
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        .faq-item:hover {
+            border-color: var(--accent);
+        }
+        
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--accent);
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 1.5rem 1.5rem;
+        }
+        
+        .faq-answer p {
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        
+        .faq-cta {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--primary);
+            margin-top: 2rem;
+            border-radius: 20px;
+        }
+        
+        .faq-cta h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .faq-cta p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .faq-hero {
+                padding: 6rem 1.5rem 3rem;
+                min-height: auto;
+            }
+            
+            .faq-question {
+                font-size: 1rem;
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="faq-nav">
+        <a href="index.html" class="nav-logo">FitFlow</a>
+        <div class="nav-links">
+            <a href="index.html">Startseite</a>
+            <a href="faq.html" class="active">FAQ</a>
+            <a href="kontakt.html">Kontakt</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="faq-hero">
+        <div>
+            <h1>Häufige Fragen</h1>
+            <p>Hier findest du Antworten auf die wichtigsten Fragen zu unseren Trainingsplänen.</p>
+        </div>
+    </section>
+
+    <!-- FAQ Content -->
+    <div class="faq-container">
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Wie funktioniert der Guide?
+            </button>
+            <div class="faq-answer">
+                <p>Du beantwortest 5 kurze Fragen zu deinem Ziel, deiner Erfahrung und deiner Ausstattung. Am Ende erhältst du einen auf dich zugeschnittenen Trainingsplan – ohne Vorkenntnisse nötig. Der gesamte Prozess dauert etwa 2 Minuten.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Ist der Guide wirklich kostenlos?
+            </button>
+            <div class="faq-answer">
+                <p>Die Grundversion des Guides und Basis-Trainingspläne sind komplett kostenlos. Premium-Coaching und personalisierte 1:1-Betreuung sind kostenpflichtig.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Für wen ist FitFlow geeignet?
+            </button>
+            <div class="faq-answer">
+                <p>Für alle, die ins Training einsteigen oder ihren bestehenden Plan optimieren möchten. Ob Anfänger oder erfahrener Athlet – der Guide passt sich deinem Level an.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Brauche ich ein Fitnessstudio?
+            </button>
+            <div class="faq-answer">
+                <p>Nein. Du kannst mit beliebiger Ausstattung starten – vom reinen Körpergewichtstraining bis zum vollen Fitnessstudio. Im Guide wählst du deine Option, und wir passen den Plan entsprechend an.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Kann ich später wechseln oder anpassen?
+            </button>
+            <div class="faq-answer">
+                <p>Ja. Im Premium-Paket kannst du deinen Plan monatlich anpassen lassen und erhältst regelmäßige Check-ins mit einem Coach. Der Basis-Plan ist ein statischer Plan, den du selbst nach Bedarf anpassen kannst.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Wie lange dauert es, Ergebnisse zu sehen?
+            </button>
+            <div class="faq-answer">
+                <p>Erste Verbesserungen sind nach 2–3 Wochen spürbar (mehr Energie, bessere Ausführung). Sichtbare körperliche Veränderungen zeigen sich typischerweise nach 8–12 Wochen bei konsequentem Training.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Was ist der Unterschied zwischen Trainingsplan und Coaching?
+            </button>
+            <div class="faq-answer">
+                <p>Ein Trainingsplan ist ein ausgearbeiteter Plan zum Selbstumsetzen. Beim Coaching bekommst du 1:1-Betreuung, regelmäßige Anpassungen und direkten Kontakt zu einem Coach – für diejenigen, die maximale Unterstützung wollen.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Sind die Pläne wissenschaftlich fundiert?
+            </button>
+            <div class="faq-answer">
+                <p>Ja. Unsere Trainingspläne basieren auf aktuellen sportwissenschaftlichen Erkenntnissen und wurden von zertifizierten Trainern entwickelt. Progressive Belastungssteigerung, angemessene Erholungszeiten und periodisiertes Training sind integrale Bestandteile.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Was passiert nach dem Kauf eines Plans?
+            </button>
+            <div class="faq-answer">
+                <p>Nach dem Kauf erhältst du sofortigen Zugang zu deinem personalisierten Plan als PDF und interaktive Web-Version. Bei Fragen kannst du uns jederzeit kontaktieren.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Kann ich die Pläne auf mein Handy laden?
+            </button>
+            <div class="faq-answer">
+                <p>Ja. Unser interaktiver Guide funktioniert responsiv auf allen Geräten. Zusätzlich kannst du deinen Plan als PDF herunterladen und offline nutzen.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="faq-container">
+        <div class="faq-cta">
+            <h2>Noch Fragen offen?</h2>
+            <p>Schreib uns eine Nachricht und wir helfen dir gerne weiter.</p>
+            <a href="kontakt.html" class="btn-primary">Zum Kontakt</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>FitFlow Performance Studio</h3>
+                <p>Dein Partner für personalisierte Fitnesslösungen</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Startseite</a>
+                <a href="faq.html">FAQ</a>
+                <a href="kontakt.html">Kontakt</a>
+            </div>
+            <div class="footer-contact">
+                <p>📧 info@fitflow-performance.de</p>
+                <p>📍 Freiburg, Deutschland</p>
+            </div>
+            <div class="footer-legal">
+                <a href="impressum.html">Impressum</a>
+                <a href="datenschutz.html">Datenschutz</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 FitFlow Performance Studio. Alle Rechte vorbehalten.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFaq(button) {
+            const item = button.closest('.faq-item');
+            const isActive = item.classList.contains('active');
+            
+            // Close all
+            document.querySelectorAll('.faq-item').forEach(i => {
+                i.classList.remove('active');
+            });
+            
+            // Open clicked if it wasn't active
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

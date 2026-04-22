@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFlow Performance Studio – Dein personalisierter Trainingsplan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Hero Section (Landing) -->
+    <section id="hero" class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="brand-label">FitFlow Performance Studio</span>
+            <h1>Finde deinen perfekten Trainingsplan</h1>
+            <p>Beantworte 5 kurze Fragen und erhalte einen auf dich zugeschnittenen Plan – ohne Vorkenntnisse nötig. Der gesamte Prozess dauert etwa 2 Minuten.</p>
+            <div class="hero-cta">
+                <button class="btn-primary" onclick="startFlow()">
+                    <span>Guide starten</span>
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+                <button class="btn-secondary" onclick="scrollToResults()">Direkt zu Ergebnissen</button>
+            </div>
+            <div class="features-preview">
+                <div class="feature-item">
+                    <span class="feature-icon">🎯</span>
+                    <span>Personalisierte Pläne</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    <span>Schnell & einfach</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💪</span>
+                    <span>Alle Level willkommen</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80" alt="Fitness Training">
+        </div>
+    </section>
+
+    <!-- Wizard Flow (Single Page) -->
+    <section id="wizard" class="wizard-section" style="display: none;">
+        <div class="wizard-container">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-dots">
+                    <span class="progress-dot active" data-step="1">1</span>
+                    <span class="progress-dot" data-step="2">2</span>
+                    <span class="progress-dot" data-step="3">3</span>
+                    <span class="progress-dot" data-step="4">4</span>
+                    <span class="progress-dot" data-step="5">5</span>
+                </div>
+                <span class="progress-text" id="progressText">Schritt 1 von 5</span>
+            </div>
+
+            <!-- Step 1: Ziel -->
+            <div class="step" id="step1">
+                <h2>Was ist dein Hauptziel?</h2>
+                <p class="step-subtitle">Wähle das Ziel, das dich am meisten antreibt</p>
+                <div class="options-grid">
+                    <div class="option-card" data-value="muskelaufbau" data-image="https://images.unsplash.com/photo-1581009146145-b5ef050c149a?w=600&q=80" onclick="selectOption(this, 'ziel', 'Muskelaufbau')">
+                        <div class="option-image">
+                            <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c149a?w=400&q=80" alt="Muskelaufbau">
+                        </div>
+                        <div class="option-content">
+                            <h3>💪 Muskelaufbau</h3>
+                            <p>Mehr Kraft und Masse aufbauen</p>
+                        </div>
+                    </div>
+                    <div class="option-card" data-value="fettabbau" data-image="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80" onclick="selectOption(this, 'ziel', 'Fettabbau')">
+                        <div class="option-image">
+                            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&q=80" alt="Fettabbau">
+                        </div>
+                        <div class="option-content">
+                            <h3>🔥 Fettabbau</h3>
+                            <p>Definieren und Fett verlieren</p>
+                        </div>
+                    </div>
+                    <div class="option-card" data-value="fitness" data-image="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80" onclick="selectOption(this, 'ziel', 'Fitness')">
+                        <div class="option-image">
+                            <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&q=80" alt="Fitness">
+                        </div>
+                        <div class="option-content">
+                            <h3>⚡ Fitness</h3>
+                            <p>Allgemeine Fitness & Wohlbefinden</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-skip" onclick="skipStep('ziel', 'Fitness')">Überspringen</button>
+            </div>
+
+            <!-- Step 2: Häufigkeit -->
+            <div class="step" id="step2" style="display: none;">
+                <h2>Wie oft möchtest du trainieren?</h2>
+                <p class="step-subtitle">Wähle deine bevorzugte Trainingshäufigkeit</p>
+                <div class="slider-container">
+                    <input type="range" min="2" max="6" value="3" class="frequency-slider" id="frequencySlider" oninput="updateFrequency(this.value)">
+                    <div class="slider-labels">
+                        <span>2 Tage</span>
+                        <span class="frequency-value" id="frequencyValue">3 Tage</span>
+                        <span>6 Tage</span>
+                    </div>
+                </div>
+                <div class="frequency-description" id="frequencyDesc">
+                    <p>3 Tage pro Woche ist ein guter Start! Du kannst das später anpassen.</p>
+                </div>
+                <div class="step-actions">
+                    <button class="btn-back" onclick="prevStep(2)">← Zurück</button>
+                    <button class="btn-primary" onclick="nextStep(2, 'haeufigkeit', document.getElementById('frequencySlider').value)">Weiter</button>
+                </div>
+                <button class="btn-skip" onclick="skipStep('haeufigkeit', 3)">Überspringen</button>
+            </div>
+
+            <!-- Step 3: Level -->
+            <div class="step" id="step3" style="display: none;">
+                <h2>Welches Trainingslevel hast du?</h2>
+                <p class="step-subtitle">Wähle das Level, das am besten zu dir passt</p>
+                <div class="options-grid options-level">
+                    <div class="option-card" onclick="selectOption(this, 'level', 'Anfänger')">
+                        <div class="option-icon">🌱</div>
+                        <div class="option-content">
+                            <h3>Anfänger</h3>
+                            <p>Ich trainiere seit weniger als 6 Monaten oder gar nicht</p>
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(this, 'level', 'Mittel')">
+                        <div class="option-icon">🌿</div>
+                        <div class="option-content">
+                            <h3>Fortgeschritten</h3>
+                            <p>Ich trainiere regelmäßig seit 6-12 Monaten</p>
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(this, 'level', 'Erfahren')">
+                        <div class="option-icon">🌳</div>
+                        <div class="option-content">
+                            <h3>Erfahren</h3>
+                            <p>Ich trainiere seit über einem Jahr mit System</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-actions">
+                    <button class="btn-back" onclick="prevStep(3)">← Zurück</button>
+                </div>
+                <button class="btn-skip" onclick="skipStep('level', 'Anfänger')">Überspringen</button>
+            </div>
+
+            <!-- Step 4: Daten -->
+            <div class="step" id="step4" style="display: none;">
+                <h2>Über dich (optional)</h2>
+                <p class="step-subtitle">Diese Daten helfen uns, deinen Plan besser anzupassen</p>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="age">Alter</label>
+                        <input type="number" id="age" placeholder="z.B. 28" min="16" max="80">
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Gewicht (kg)</label>
+                        <input type="number" id="weight" placeholder="z.B. 75" min="40" max="200">
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Größe (cm)</label>
+                        <input type="number" id="height" placeholder="z.B. 180" min="140" max="220">
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Geschlecht</label>
+                        <select id="gender">
+                            <option value="">Bitte wählen</option>
+                            <option value="maennlich">Männlich</option>
+                            <option value="weiblich">Weiblich</option>
+                            <option value="divers">Divers</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="step-actions">
+                    <button class="btn-back" onclick="prevStep(4)">← Zurück</button>
+                    <button class="btn-primary" onclick="saveDataAndNext()">Weiter</button>
+                </div>
+                <button class="btn-skip" onclick="skipStep('daten', {})">Überspringen</button>
+            </div>
+
+            <!-- Step 5: Equipment -->
+            <div class="step" id="step5" style="display: none;">
+                <h2>Was für eine Ausstattung hast du?</h2>
+                <p class="step-subtitle">Wähle die Option, die am besten zu dir passt</p>
+                <div class="options-grid">
+                    <div class="option-card" onclick="selectOption(this, 'equipment', 'Gym')">
+                        <div class="option-image">
+                            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&q=80" alt="Gym">
+                        </div>
+                        <div class="option-content">
+                            <h3>🏋️ Fitnessstudio</h3>
+                            <p>Vollständiger Gerätepark verfügbar</p>
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(this, 'equipment', 'Home')">
+                        <div class="option-image">
+                            <img src="https://images.unsplash.com/photo-1558611848-73f7eb4001a1?w=400&q=80" alt="Home Gym">
+                        </div>
+                        <div class="option-content">
+                            <h3>🏠 Home Gym</h3>
+                            <p>Hanteln, Kettlebells oder Widerstandsbänder</p>
+                        </div>
+                    </div>
+                    <div class="option-card" onclick="selectOption(this, 'equipment', 'Bodyweight')">
+                        <div class="option-image">
+                            <img src="https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=400&q=80" alt="Bodyweight">
+                        </div>
+                        <div class="option-content">
+                            <h3>🧘 Nur Körpergewicht</h3>
+                            <p>Keine Ausrüstung nötig</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-actions">
+                    <button class="btn-back" onclick="prevStep(5)">← Zurück</button>
+                </div>
+                <button class="btn-skip" onclick="skipStep('equipment', 'Bodyweight')">Überspringen</button>
+            </div>
+
+            <!-- Results -->
+            <div class="step" id="stepResults" style="display: none;">
+                <h2>Dein personalisierter Plan</h2>
+                <p class="step-subtitle">Basierend auf deinen Angaben empfehlen wir:</p>
+                <div class="results-grid" id="resultsGrid">
+                    <!-- Dynamisch generiert -->
+                </div>
+                <div class="step-actions">
+                    <button class="btn-back" onclick="resetFlow()">Neustarten</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Preview Section -->
+    <section id="results-preview" class="results-section">
+        <div class="section-header">
+            <span class="brand-label">Empfehlungen</span>
+            <h2>Finde das passende Angebot</h2>
+            <p>Ob eigenständiger Plan oder persönliche Betreuung – wir haben die richtige Lösung für dich.</p>
+        </div>
+        <div class="results-grid">
+            <div class="result-card">
+                <div class="result-image">
+                    <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=500&q=80" alt="Trainingsplan">
+                </div>
+                <div class="result-content">
+                    <span class="result-tag">Beliebt</span>
+                    <h3>Trainingsplan</h3>
+                    <p>Dein ausgearbeiteter Plan zum Selbstumsetzen. Strukturiert, einfach, effektiv.</p>
+                    <ul class="result-features">
+                        <li>✓ 12-Wochen-Plan</li>
+                        <li>✓ Übungsvideos</li>
+                        <li>✓ Ernährungstipps</li>
+                    </ul>
+                    <div class="result-price">
+                        <span class="price-from">ab</span>
+                        <span class="price">29€</span>
+                    </div>
+                    <button class="btn-primary btn-block" onclick="startFlow()">Jetzt starten</button>
+                </div>
+            </div>
+            <div class="result-card featured">
+                <div class="result-image">
+                    <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=500&q=80" alt="Coaching">
+                </div>
+                <div class="result-content">
+                    <span class="result-tag">Premium</span>
+                    <h3>1:1 Coaching</h3>
+                    <p>Persönliche Betreuung mit regelmäßigen Anpassungen und direktem Kontakt.</p>
+                    <ul class="result-features">
+                        <li>✓ Wöchentliche Check-ins</li>
+                        <li>✓ Monatliche Plananpassung</li>
+                        <li>✓ WhatsApp-Support</li>
+                    </ul>
+                    <div class="result-price">
+                        <span class="price-from">ab</span>
+                        <span class="price">99€</span>
+                        <span class="price-period">/Monat</span>
+                    </div>
+                    <button class="btn-primary btn-block" onclick="startFlow()">Beratung starten</button>
+                </div>
+            </div>
+            <div class="result-card">
+                <div class="result-image">
+                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&q=80" alt="Premium Paket">
+                </div>
+                <div class="result-content">
+                    <span class="result-tag">Alles inklusive</span>
+                    <h3>Premium Paket</h3>
+                    <p>Das Rundum-Sorglos-Paket mit Coaching, Supplements und Tracking.</p>
+                    <ul class="result-features">
+                        <li>✓ Alles aus Coaching</li>
+                        <li>✓ Premium Supplements</li>
+                        <li>✓ Body-Tracking</li>
+                    </ul>
+                    <div class="result-price">
+                        <span class="price-from">ab</span>
+                        <span class="price">199€</span>
+                        <span class="price-period">/Monat</span>
+                    </div>
+                    <button class="btn-primary btn-block" onclick="startFlow()">Mehr erfahren</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Teaser -->
+    <section class="faq-teaser">
+        <div class="faq-teaser-content">
+            <h2>Häufige Fragen</h2>
+            <p>Hier findest du Antworten auf die wichtigsten Fragen zu unseren Trainingsplänen.</p>
+            <a href="faq.html" class="btn-secondary">Zum FAQ</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>FitFlow Performance Studio</h3>
+                <p>Dein Partner für personalisierte Fitnesslösungen</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Startseite</a>
+                <a href="faq.html">FAQ</a>
+                <a href="kontakt.html">Kontakt</a>
+            </div>
+            <div class="footer-contact">
+                <p>📧 info@fitflow-performance.de</p>
+                <p>📍 Freiburg, Deutschland</p>
+            </div>
+            <div class="footer-legal">
+                <a href="impressum.html">Impressum</a>
+                <a href="datenschutz.html">Datenschutz</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 FitFlow Performance Studio. Alle Rechte vorbehalten.</p>
+        </div>
+    </footer>
+
+    <!-- Partial Save Modal -->
+    <div id="partialSaveModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Weitermachen?</h3>
+            <p>Du hast bereits einige Fragen beantwortet. Möchtest du dort weitermachen?</p>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="discardProgress()">Neu starten</button>
+                <button class="btn-primary" onclick="continueProgress()">Weitermachen</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
