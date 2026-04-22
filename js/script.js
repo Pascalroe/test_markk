@@ -6,9 +6,11 @@
 function toggleMobileNav() {
     const navToggle = document.querySelector('.nav-toggle');
     const navLinks = document.querySelector('.nav-links');
+    const isOpen = navLinks.classList.toggle('active');
     
     navToggle.classList.toggle('active');
-    navLinks.classList.toggle('active');
+    navToggle.setAttribute('aria-expanded', isOpen);
+    navToggle.setAttribute('aria-label', isOpen ? 'Navigation schließen' : 'Navigation öffnen');
 }
 
 // Close mobile nav when clicking a link

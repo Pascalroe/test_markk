@@ -31,34 +31,66 @@
             background: rgba(15, 15, 26, 0.98);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            padding: 0.75rem 1rem;
+            padding: 1rem;
             border-bottom: 1px solid var(--border);
         }
         
-        .progress-container {
-            max-width: 500px;
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            max-width: 400px;
             margin: 0 auto;
         }
         
-        .progress-bar {
-            height: 4px;
+        .progress-step {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             background: var(--border);
-            border-radius: 2px;
-            overflow: hidden;
-            margin-bottom: 0.5rem;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
         }
         
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--accent-light));
-            width: 20%;
-            transition: width 0.4s ease;
+        .progress-step.completed {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+        
+        .progress-step.active {
+            background: transparent;
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: scale(1.15);
+            box-shadow: 0 0 15px rgba(233, 69, 96, 0.4);
+        }
+        
+        .progress-line {
+            width: 30px;
+            height: 2px;
+            background: var(--border);
+            transition: background 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .progress-line.completed {
+            background: var(--accent);
         }
         
         .progress-text {
             font-size: 0.8rem;
             color: var(--text-muted);
             text-align: center;
+            margin-top: 0.75rem;
         }
         
         .wizard-step {
@@ -601,7 +633,21 @@
             
             .wizard-progress {
                 top: 55px;
-                padding: 0.5rem 0.75rem;
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .progress-steps {
+                gap: 0.25rem;
+            }
+            
+            .progress-step {
+                width: 28px;
+                height: 28px;
+                font-size: 0.7rem;
+            }
+            
+            .progress-line {
+                width: 20px;
             }
             
             .wizard-step {
@@ -809,14 +855,27 @@
             }
         }
     </style>
-</head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <meta property="og:title" content="mk – Dein personalisierter Trainingsplan">
+    <meta property="og:description" content="Finde deinen optimalen Trainingsplan. Interaktiver Fitness-Guide für Muskelaufbau, Fettabbau und Fitness.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pascalroe.github.io/test_markk/">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1200&q=80">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="mk – Dein personalisierter Trainingsplan">
+    <meta name="twitter:description" content="Finde deinen optimalen Trainingsplan. Interaktiver Fitness-Guide für Muskelaufbau, Fettabbau und Fitness.">
+    <link rel="canonical" href="https://pascalroe.github.io/test_markk/">
+  </head>
 <body>
+    <a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
     <nav class="main-nav">
         <a href="index.html" class="nav-logo">
-            <img src="images/logo.svg" alt="mk" height="32">
+            <img loading="lazy" src="images/logo.svg" alt="mk" height="32">
             <span>mk</span>
         </a>
-        <button class="nav-toggle" onclick="toggleMobileNav()">
+        <button class="nav-toggle" onclick="toggleMobileNav()" aria-label="Navigation öffnen" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
         <div class="nav-links">
@@ -832,12 +891,18 @@
 
     <div class="wizard-page">
         <div class="wizard-progress">
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <p class="progress-text" id="progressText">Schritt 1 von 5</p>
+            <div class="progress-steps">
+                <div class="progress-step active" data-step="1">1</div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="2">2</div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="3">3</div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="4">4</div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="5">5</div>
             </div>
+            <p class="progress-text" id="progressText">Schritt 1 von 5</p>
         </div>
 
         <!-- Step 1: Goal -->
@@ -848,21 +913,21 @@
             </div>
             <div class="goal-cards">
                 <div class="goal-card" onclick="selectGoal(this, 'muskelaufbau')" role="button" tabindex="0">
-                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=500&q=80" alt="Muskelaufbau">
+                    <img loading="lazy" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=500&q=80" alt="Muskelaufbau">
                     <div class="goal-card-overlay">
                         <h3>Muskelaufbau</h3>
                         <p>Mehr Masse und Kraft</p>
                     </div>
                 </div>
                 <div class="goal-card" onclick="selectGoal(this, 'fettabbau')" role="button" tabindex="0">
-                    <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500&q=80" alt="Fettabbau">
+                    <img loading="lazy" src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500&q=80" alt="Fettabbau">
                     <div class="goal-card-overlay">
                         <h3>Fettabbau</h3>
                         <p>Definieren und Fett verlieren</p>
                     </div>
                 </div>
                 <div class="goal-card" onclick="selectGoal(this, 'fitness')" role="button" tabindex="0">
-                    <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&q=80" alt="Fitness">
+                    <img loading="lazy" src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&q=80" alt="Fitness">
                     <div class="goal-card-overlay">
                         <h3>Fitness</h3>
                         <p>Allgemeine Fitness</p>
@@ -1033,7 +1098,7 @@
     <footer>
         <div class="footer-content">
             <div class="footer-brand">
-                <img src="images/logo.svg" alt="mk" height="40">
+                <img loading="lazy" src="images/logo.svg" alt="mk" height="40">
                 <p>Dein personalisierter Fitness-Guide</p>
             </div>
             <div class="footer-links">
@@ -1051,7 +1116,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2024 mk. Alle Rechte vorbehalten.</p>
+            <p>© 2026 mk. Alle Rechte vorbehalten.</p>
         </div>
     </footer>
 
@@ -1067,8 +1132,27 @@
         };
 
         function updateProgress(step) {
-            const progress = (step / 6) * 100;
-            document.getElementById('progressFill').style.width = `${progress}%`;
+            const steps = document.querySelectorAll('.progress-step');
+            const lines = document.querySelectorAll('.progress-line');
+            
+            steps.forEach((s, i) => {
+                const stepNum = i + 1;
+                s.classList.remove('completed', 'active');
+                if (stepNum < step) {
+                    s.classList.add('completed');
+                    s.innerHTML = '✓';
+                } else if (stepNum === step) {
+                    s.classList.add('active');
+                    s.innerHTML = stepNum;
+                } else {
+                    s.innerHTML = stepNum;
+                }
+            });
+            
+            lines.forEach((line, i) => {
+                line.classList.toggle('completed', i < step - 1);
+            });
+            
             document.getElementById('progressText').textContent = step === 6 ? 'Dein Ergebnis' : `Schritt ${step} von 5`;
         }
 

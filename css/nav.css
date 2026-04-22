@@ -661,3 +661,34 @@ footer {
         max-width: 250px;
     }
 }
+
+/* ============================================
+   SKIP LINK (Accessibility)
+   ============================================ */
+
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0 0 12px 12px;
+    text-decoration: none;
+    font-weight: 600;
+    z-index: 9999;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid var(--accent-light);
+}
+
+@media (max-width: 768px) {
+    .skip-link {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+}
