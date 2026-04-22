@@ -825,6 +825,7 @@
             <a href="ueber-mich.html">Über mich</a>
             <a href="erfolge.html">Erfolge</a>
             <a href="faq.html">FAQ</a>
+                <a href="preise.html">Preise</a>
             <a href="kontakt.html">Kontakt</a>
         </div>
     </nav>
@@ -1041,6 +1042,7 @@
                 <a href="ueber-mich.html">Über mich</a>
                 <a href="erfolge.html">Erfolge</a>
                 <a href="faq.html">FAQ</a>
+                <a href="preise.html">Preise</a>
                 <a href="kontakt.html">Kontakt</a>
             </div>
             <div class="footer-legal">
@@ -1139,7 +1141,10 @@
             
             const goalLabels = { muskelaufbau: 'Muskelaufbau', fettabbau: 'Fettabbau', fitness: 'Fitness' };
             const levelLabels = { anfaenger: 'Anfänger', fortgeschritten: 'Fortgeschritten', profi: 'Profi' };
-            const equipLabels = { gym: 'Studio', home: 'Home', bodyweight: 'Bodyweight' };
+            const equipLabels = { gym: 'Studio', home: 'Home Gym', bodyweight: 'Bodyweight' };
+            
+            // Intelligente Paket-Empfehlung basierend auf Eingaben
+            const recommendation = getRecommendation();
             
             document.getElementById('resultsSummary').innerHTML = `
                 <div class="summary-item">
@@ -1159,52 +1164,100 @@
                     <div class="value">${equipLabels[wizardData.equipment]}</div>
                 </div>
                 <div class="summary-item">
-                    <div class="label">Plan</div>
-                    <div class="value">Premium</div>
+                    <div class="label">Paket</div>
+                    <div class="value">${recommendation.name}</div>
                 </div>
             `;
             
-            const plans = {
-                muskelaufbau: {
-                    name: 'Muskelaufbau Premium',
-                    price: '49',
-                    period: 'einmalig',
-                    desc: '12-Wochen-Plan für maximales Muskelwachstum mit progressiver Belastungssteigerung und Übungsvideos.',
-                    features: ['12-Wochen Trainingsplan', 'Übungsvideos', 'Makro-Rechner', 'Wochenweise Progression', 'E-Mail Support']
-                },
-                fettabbau: {
-                    name: 'Fatburn Programm',
-                    price: '39',
-                    period: 'einmalig',
-                    desc: 'Effektives 8-Wochen-Programm für nachhaltigen Fettabbau mit Cardio- und Krafttraining.',
-                    features: ['8-Wochen Fatburn-Plan', 'HIIT-Einheiten', 'Kalorienrechner', 'Meal Prep Leitfaden', 'Wöchentliche Check-ins']
-                },
-                fitness: {
-                    name: 'Fitness Grundprogramm',
-                    price: '29',
-                    period: 'einmalig',
-                    desc: 'Ausgewogener 8-Wochen-Plan für allgemeine Fitness und Wohlbefinden. Perfekt für den Einstieg.',
-                    features: ['8-Wochen Trainingsplan', 'Ganzkörpertraining', 'Flexibility-Übungen', 'Stressmanagement', 'Progressionsplan']
-                }
-            };
-            
-            const plan = plans[wizardData.goal];
             document.getElementById('recommendedPlan').innerHTML = `
-                <span class="plan-badge">Empfohlen</span>
+                <span class="plan-badge">${recommendation.badge}</span>
                 <div class="plan-header">
-                    <h3>${plan.name}</h3>
+                    <h3>${recommendation.name}</h3>
                     <div class="plan-price">
-                        <span class="price">${plan.price}€</span>
-                        <span class="period">${plan.period}</span>
+                        <span class="price">${recommendation.price}€</span>
+                        <span class="period">${recommendation.period}</span>
                     </div>
                 </div>
-                <p class="plan-description">${plan.desc}</p>
+                <p class="plan-description">${recommendation.desc}</p>
                 <ul class="plan-features">
-                    ${plan.features.map(f => `<li>${f}</li>`).join('')}
+                    ${recommendation.features.map(f => `<li>${f}</li>`).join('')}
                 </ul>
+                <div class="results-actions" style="margin-top: 1.5rem;">
+                    <a href="kontakt.html?paket=${recommendation.link}" class="btn-primary btn-large" style="flex: 1; text-align: center;">${recommendation.cta}</a>
+                </div>
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">
+                    Oder <a href="preise.html" style="color: var(--accent);">alle Pakete ansehen</a> – ich finde mit dir das richtige.
+                </p>
             `;
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function getRecommendation() {
+            const level = wizardData.level;
+            const goal = wizardData.goal;
+            const frequency = wizardData.frequency;
+            
+            // Premium: Profi-Level oder viel Frequency oder Muskelaufbau/Fettabbau
+            if (level === 'profi' || frequency >= 5 || goal === 'muskelaufbau' || goal === 'fettabbau') {
+                return {
+                    name: 'Premium Coaching',
+                    badge: '🔥 Optimale Wahl',
+                    price: '199',
+                    period: '/ Monat',
+                    desc: 'Komplett personalisierte Betreuung mit wöchentlichen Check-ins, 24h Support und Videoanalyse. Für alle, die maximale Ergebnisse wollen.',
+                    features: [
+                        'Individueller Trainings- & Ernährungsplan',
+                        'Wöchentliche Check-ins + Auswertung',
+                        '24h direkter Kontakt',
+                        'Videoanalyse für perfekte Technik',
+                        'Strategien für Plateaus',
+                        'Mentale Unterstützung'
+                    ],
+                    cta: 'Premium starten →',
+                    link: 'premium'
+                };
+            }
+            
+            // Standard: Fortgeschritten oder 3-4 Tage
+            if (level === 'fortgeschritten' || frequency >= 3) {
+                return {
+                    name: 'Standard',
+                    badge: '🔸 Empfohlen',
+                    price: '99',
+                    period: '/ Monat',
+                    desc: 'Detaillierter Trainingsplan mit Progressionssystem, individuelle Ernährungsstrategie und wöchentliche Anpassungen.',
+                    features: [
+                        'Individueller Trainingsplan',
+                        'Fortschrittliche Ernährungsstrategie',
+                        'Kalorien- & Makro-Berechnung',
+                        'Wöchentliche Anpassungen',
+                        '2 Check-ins pro Monat',
+                        'WhatsApp Support (48h)'
+                    ],
+                    cta: 'Standard starten →',
+                    link: 'standard'
+                };
+            }
+            
+            // Basis: Anfänger oder weniger Tage
+            return {
+                name: 'Basis',
+                badge: '🔹 Einstieg',
+                price: '49',
+                period: '/ Monat',
+                desc: 'Klarer Trainingsplan mit grundlegenden Ernährungsempfehlungen. Perfekt für den Start in dein neues Trainingsleben.',
+                features: [
+                    'Individueller Trainingsplan',
+                    'Fokus auf dein Ziel',
+                    'Trainingssplit & Übungsauswahl',
+                    'Grundlegende Ernährungstipps',
+                    'Zugang zum Trainingsbereich',
+                    '1 Check-in pro Monat'
+                ],
+                cta: 'Basis starten →',
+                link: 'basis'
+            };
         }
 
         function resetWizard() {

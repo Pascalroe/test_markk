@@ -26,6 +26,7 @@
             <a href="ueber-mich.html">Über mich</a>
             <a href="erfolge.html">Erfolge</a>
             <a href="faq.html">FAQ</a>
+                <a href="preise.html">Preise</a>
             <a href="kontakt.html" class="active">Kontakt</a>
         </div>
     </nav>
@@ -43,6 +44,14 @@
                 <div class="contact-form-wrapper">
                     <h2>Schreib mir</h2>
                     <form id="contactForm" onsubmit="submitContact(event)">
+                        <div id="packageInfo" class="package-info-box" style="display: none;">
+                            <span class="package-icon" id="packageIcon"></span>
+                            <div>
+                                <strong>Ausgewähltes Paket:</strong>
+                                <span id="packageName"></span>
+                            </div>
+                        </div>
+                        
                         <div class="form-group">
                             <label for="name">Name *</label>
                             <input type="text" id="name" name="name" required placeholder="Dein Name">
@@ -51,6 +60,18 @@
                         <div class="form-group">
                             <label for="email">E-Mail *</label>
                             <input type="email" id="email" name="email" required placeholder="deine@email.de">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="package">Gewünschtes Paket</label>
+                            <select id="package" name="package">
+                                <option value="">Bitte wählen...</option>
+                                <option value="basis">Basis (49€/Monat)</option>
+                                <option value="standard">Standard (99€/Monat)</option>
+                                <option value="premium">Premium Coaching (199€/Monat)</option>
+                                <option value="pt">Personal Training (80€/Session)</option>
+                                <option value="sonstiges">Noch unsicher / Sonstiges</option>
+                            </select>
                         </div>
                         
                         <div class="form-group">
@@ -130,6 +151,7 @@
                 <a href="ueber-mich.html">Über mich</a>
                 <a href="erfolge.html">Erfolge</a>
                 <a href="faq.html">FAQ</a>
+                <a href="preise.html">Preise</a>
                 <a href="kontakt.html">Kontakt</a>
             </div>
             <div class="footer-legal">
@@ -143,16 +165,72 @@
     </footer>
 
     <script src="js/script.js"></script>
+    <style>
+        .package-info-box {
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.15), rgba(255, 107, 107, 0.15));
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .package-icon {
+            font-size: 1.5rem;
+        }
+        
+        .package-info-box strong {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+        }
+        
+        #packageName {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+    </style>
     <script>
+        // Handle URL parameter for package selection
+        const urlParams = new URLSearchParams(window.location.search);
+        const paket = urlParams.get('paket');
+        
+        if (paket) {
+            const packageNames = {
+                'basis': '🔹 Basis – 49€/Monat',
+                'standard': '🔸 Standard – 99€/Monat',
+                'premium': '🔥 Premium Coaching – 199€/Monat',
+                'pt': '🏋️ Personal Training – 80€/Session'
+            };
+            
+            const packageIcons = {
+                'basis': '🔹',
+                'standard': '🔸',
+                'premium': '🔥',
+                'pt': '🏋️'
+            };
+            
+            if (packageNames[paket]) {
+                document.getElementById('packageInfo').style.display = 'flex';
+                document.getElementById('packageIcon').textContent = packageIcons[paket];
+                document.getElementById('packageName').textContent = packageNames[paket];
+                document.getElementById('package').value = paket;
+            }
+        }
+        
         function submitContact(e) {
             e.preventDefault();
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
+            const pack = document.getElementById('package').value;
             const goal = document.getElementById('goal').value;
             const message = document.getElementById('message').value;
             
-            const subject = goal ? `mk: ${goal}` : 'mk Kontakt';
-            const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0AZiel: ${goal}%0D%0A%0D%0A${message}`;
+            const subject = pack ? `mk: ${pack} Anfrage` : 'mk Kontakt';
+            const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0APaket: ${pack}%0D%0AZiel: ${goal}%0D%0A%0D%0A${message}`;
             window.location.href = `mailto:info@mk-fitness.de?subject=${encodeURIComponent(subject)}&body=${body}`;
             
             document.getElementById('contactForm').style.display = 'none';
