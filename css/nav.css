@@ -75,19 +75,31 @@
     display: none;
     flex-direction: column;
     gap: 5px;
-    background: none;
-    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
     cursor: pointer;
-    padding: 8px;
+    padding: 10px;
     z-index: 1002;
+    transition: all 0.3s ease;
+}
+
+.nav-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--accent);
 }
 
 .nav-toggle span {
-    width: 24px;
+    width: 22px;
     height: 2px;
     background: var(--text);
     transition: all 0.3s ease;
     display: block;
+}
+
+.nav-toggle.active {
+    background: rgba(233, 69, 96, 0.2);
+    border-color: var(--accent);
 }
 
 .nav-toggle.active span:nth-child(1) {
