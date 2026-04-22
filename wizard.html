@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Dein Plan – mk</title>
     <meta name="description" content="Finde in 5 Schritten deinen personalisierten Trainingsplan.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,34 +11,41 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/nav.css">
     <style>
-        /* Wizard specific */
+        /* ============================================
+           WIZARD SPECIFIC STYLES
+           ============================================ */
+        
         .wizard-page {
             min-height: 100vh;
-            padding-top: 80px;
+            min-height: 100dvh;
+            padding-top: 70px;
+            padding-bottom: 2rem;
         }
         
         .wizard-progress {
             position: fixed;
-            top: 70px;
+            top: 60px;
             left: 0;
             right: 0;
             z-index: 100;
             background: rgba(15, 15, 26, 0.98);
-            padding: 1rem 2rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 0.75rem 1rem;
             border-bottom: 1px solid var(--border);
         }
         
         .progress-container {
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
         }
         
         .progress-bar {
-            height: 6px;
+            height: 4px;
             background: var(--border);
-            border-radius: 3px;
+            border-radius: 2px;
             overflow: hidden;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
         }
         
         .progress-fill {
@@ -49,14 +56,14 @@
         }
         
         .progress-text {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             text-align: center;
         }
         
         .wizard-step {
             display: none;
-            padding: 2rem;
+            padding: 1.5rem;
             max-width: 900px;
             margin: 0 auto;
             animation: fadeIn 0.4s ease;
@@ -67,53 +74,58 @@
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         .step-header {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
         }
         
         .step-header h2 {
-            font-size: 2rem;
+            font-size: clamp(1.5rem, 4vw, 2rem);
             margin-bottom: 0.5rem;
         }
         
         .step-header p {
             color: var(--text-muted);
+            font-size: clamp(0.9rem, 2vw, 1rem);
         }
         
-        /* Step 1: Goal Cards */
+        /* ============================================
+           STEP 1: GOAL CARDS
+           ============================================ */
+        
         .goal-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+            gap: 1rem;
         }
         
         .goal-card {
             position: relative;
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
             border: 3px solid transparent;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .goal-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             border-color: var(--accent);
         }
         
         .goal-card.selected {
             border-color: var(--accent);
-            box-shadow: 0 0 30px rgba(233, 69, 96, 0.3);
+            box-shadow: 0 0 25px rgba(233, 69, 96, 0.3);
         }
         
         .goal-card img {
             width: 100%;
-            height: 250px;
+            height: 180px;
             object-fit: cover;
         }
         
@@ -122,51 +134,56 @@
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 1.5rem;
+            padding: 1rem;
             background: linear-gradient(transparent, rgba(15, 15, 26, 0.95));
         }
         
         .goal-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
         }
         
         .goal-card p {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
         }
         
-        /* Step 2: Frequency Slider */
+        /* ============================================
+           STEP 2: FREQUENCY SLIDER
+           ============================================ */
+        
         .frequency-control {
             text-align: center;
-            padding: 3rem 2rem;
+            padding: 2rem 1.5rem;
             background: var(--bg-glass);
-            border-radius: 20px;
+            border-radius: 16px;
             border: 1px solid var(--border);
         }
         
         .frequency-value {
-            font-size: 5rem;
+            font-size: clamp(4rem, 15vw, 5rem);
             font-weight: 700;
             color: var(--accent);
             line-height: 1;
+            margin-bottom: 0.5rem;
         }
         
         .frequency-label {
-            font-size: 1.5rem;
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
             color: var(--text-muted);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
         
         .slider-container {
-            max-width: 400px;
-            margin: 0 auto 1.5rem;
+            max-width: 350px;
+            margin: 0 auto 1rem;
         }
         
         .slider {
             width: 100%;
             height: 8px;
             -webkit-appearance: none;
+            appearance: none;
             background: var(--border);
             border-radius: 4px;
             outline: none;
@@ -174,41 +191,62 @@
         
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             background: var(--accent);
             border-radius: 50%;
             cursor: pointer;
             box-shadow: 0 2px 10px rgba(233, 69, 96, 0.4);
+            border: 3px solid white;
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(233, 69, 96, 0.4);
+            border: 3px solid white;
         }
         
         .frequency-days {
             display: flex;
             justify-content: space-between;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
         }
         
-        /* Step 3: Level */
+        #freqHint {
+            color: var(--text-muted);
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* ============================================
+           STEP 3: LEVEL
+           ============================================ */
+        
         .level-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+            gap: 1rem;
         }
         
         .level-card {
-            padding: 2rem;
+            padding: 1.5rem 1rem;
             background: var(--bg-glass);
             border: 2px solid var(--border);
-            border-radius: 20px;
+            border-radius: 16px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .level-card:hover {
             border-color: var(--accent);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
         
         .level-card.selected {
@@ -217,27 +255,30 @@
         }
         
         .level-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
         }
         
         .level-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
         }
         
         .level-card p {
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
         }
         
-        /* Step 4: Data */
+        /* ============================================
+           STEP 4: DATA
+           ============================================ */
+        
         .data-form {
-            max-width: 500px;
+            max-width: 450px;
             margin: 0 auto;
             background: var(--bg-glass);
-            padding: 2.5rem;
-            border-radius: 20px;
+            padding: 1.5rem;
+            border-radius: 16px;
             border: 1px solid var(--border);
         }
         
@@ -247,26 +288,77 @@
             gap: 1rem;
         }
         
-        /* Step 5: Equipment */
+        .data-form .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .data-form .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+        }
+        
+        .data-form .form-group input,
+        .data-form .form-group select,
+        .data-form .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .data-form .form-group input:focus,
+        .data-form .form-group select:focus,
+        .data-form .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .data-form .form-group input::placeholder,
+        .data-form .form-group textarea::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .data-form .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .data-form .privacy-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+        }
+        
+        /* ============================================
+           STEP 5: EQUIPMENT
+           ============================================ */
+        
         .equipment-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+            gap: 1rem;
         }
         
         .equipment-card {
-            padding: 2rem;
+            padding: 1.5rem 1rem;
             background: var(--bg-glass);
             border: 2px solid var(--border);
-            border-radius: 20px;
+            border-radius: 16px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .equipment-card:hover {
             border-color: var(--accent);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
         
         .equipment-card.selected {
@@ -275,35 +367,40 @@
         }
         
         .equipment-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
         }
         
         .equipment-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
         }
         
         .equipment-card p {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
         }
         
-        /* Wizard Navigation */
+        /* ============================================
+           WIZARD NAVIGATION
+           ============================================ */
+        
         .wizard-nav {
             display: flex;
             justify-content: center;
             gap: 1rem;
             margin-top: 2rem;
-            padding-bottom: 2rem;
+            padding-bottom: 1rem;
         }
         
         .wizard-nav button {
-            padding: 1rem 2rem;
-            border-radius: 12px;
+            padding: 0.9rem 1.75rem;
+            border-radius: 10px;
             font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .btn-back {
@@ -316,6 +413,10 @@
             border-color: var(--accent);
         }
         
+        .btn-back:active {
+            background: rgba(233, 69, 96, 0.1);
+        }
+        
         .btn-next {
             background: var(--accent);
             border: none;
@@ -326,17 +427,30 @@
             background: var(--accent-light);
         }
         
-        /* Results */
+        .btn-next:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-next:disabled {
+            background: var(--border);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+        
+        /* ============================================
+           RESULTS
+           ============================================ */
+        
         .results-header {
             text-align: center;
-            padding: 3rem 2rem;
+            padding: 2rem 1.5rem;
             background: var(--bg-glass);
-            border-radius: 20px;
-            margin-bottom: 2rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
         }
         
         .results-header h2 {
-            font-size: 2.5rem;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
             margin-bottom: 0.5rem;
         }
         
@@ -347,56 +461,63 @@
         .results-summary {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
         }
         
         .summary-item {
             text-align: center;
-            padding: 1rem;
+            padding: 0.75rem 0.5rem;
             background: var(--bg-glass);
-            border-radius: 12px;
+            border-radius: 10px;
             border: 1px solid var(--border);
+            flex-shrink: 0;
         }
         
         .summary-item .label {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.2rem;
+            text-transform: uppercase;
         }
         
         .summary-item .value {
             font-weight: 600;
+            font-size: 0.9rem;
         }
         
         .recommended-plan {
-            background: linear-gradient(135deg, rgba(233, 69, 96, 0.15), rgba(255, 107, 107, 0.15));
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.12), rgba(255, 107, 107, 0.12));
             border: 2px solid var(--accent);
-            border-radius: 24px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
         }
         
         .plan-badge {
             display: inline-block;
             background: var(--accent);
             color: white;
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.8rem;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
         
         .plan-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
         
         .plan-header h3 {
-            font-size: 1.8rem;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
         }
         
         .plan-price {
@@ -404,88 +525,202 @@
         }
         
         .plan-price .price {
-            font-size: 2.5rem;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
             font-weight: 700;
             color: var(--accent);
         }
         
         .plan-price .period {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
         }
         
         .plan-description {
             color: var(--text-muted);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
             line-height: 1.6;
+            font-size: 0.95rem;
         }
         
         .plan-features {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            margin-bottom: 2rem;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
         }
         
         .plan-features li {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: var(--text);
+            font-size: 0.9rem;
         }
         
         .plan-features li::before {
             content: '✓';
             color: var(--accent);
             font-weight: bold;
+            flex-shrink: 0;
         }
         
         .results-actions {
             display: flex;
             gap: 1rem;
             justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .results-actions .btn-primary {
+            flex: 1;
+            min-width: 200px;
         }
         
         .btn-reset {
             background: transparent;
             border: 2px solid var(--border);
             color: var(--text);
-            padding: 1rem 2rem;
-            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
+            font-size: 0.95rem;
         }
         
         .btn-reset:hover {
             border-color: var(--accent);
         }
         
-        /* Mobile */
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        
         @media (max-width: 768px) {
+            .wizard-page {
+                padding-top: 60px;
+            }
+            
             .wizard-progress {
-                padding: 0.75rem 1rem;
+                top: 55px;
+                padding: 0.5rem 0.75rem;
             }
             
             .wizard-step {
-                padding: 1.5rem 1rem;
+                padding: 1.25rem 1rem;
             }
             
-            .goal-cards,
-            .level-cards,
-            .equipment-cards {
+            .step-header {
+                margin-bottom: 1.5rem;
+            }
+            
+            /* Goal Cards - single column */
+            .goal-cards {
                 grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            
+            .goal-card {
+                display: flex;
+                align-items: center;
             }
             
             .goal-card img {
-                height: 180px;
+                width: 120px;
+                height: 100px;
+                flex-shrink: 0;
+            }
+            
+            .goal-card-overlay {
+                position: static;
+                background: none;
+                padding: 1rem;
+            }
+            
+            .goal-card h3 {
+                font-size: 1rem;
+            }
+            
+            /* Level Cards - single column */
+            .level-cards {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            
+            .level-card {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                text-align: left;
+                padding: 1rem;
+            }
+            
+            .level-icon {
+                font-size: 2rem;
+                margin: 0;
+            }
+            
+            .level-card h3 {
+                margin-bottom: 0.15rem;
+            }
+            
+            /* Equipment Cards - single column */
+            .equipment-cards {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            
+            .equipment-card {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                text-align: left;
+                padding: 1rem;
+            }
+            
+            .equipment-icon {
+                font-size: 2rem;
+                margin: 0;
+            }
+            
+            .equipment-card h3 {
+                margin-bottom: 0.15rem;
+            }
+            
+            /* Data Form */
+            .data-form {
+                padding: 1.25rem;
             }
             
             .form-row {
                 grid-template-columns: 1fr;
+                gap: 0.75rem;
             }
             
+            /* Wizard Navigation */
+            .wizard-nav {
+                flex-direction: column;
+                gap: 0.75rem;
+                margin-top: 1.5rem;
+            }
+            
+            .wizard-nav button {
+                width: 100%;
+            }
+            
+            /* Results */
             .results-summary {
                 grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .summary-item {
+                padding: 0.6rem 0.4rem;
+            }
+            
+            .summary-item .label {
+                font-size: 0.65rem;
+            }
+            
+            .summary-item .value {
+                font-size: 0.8rem;
             }
             
             .plan-features {
@@ -503,8 +738,74 @@
         }
         
         @media (max-width: 480px) {
+            .wizard-step {
+                padding: 1rem 0.75rem;
+            }
+            
+            .goal-card img {
+                width: 90px;
+                height: 80px;
+            }
+            
+            .goal-card-overlay {
+                padding: 0.75rem;
+            }
+            
+            .goal-card h3 {
+                font-size: 0.95rem;
+            }
+            
+            .goal-card p {
+                font-size: 0.75rem;
+            }
+            
+            .frequency-control {
+                padding: 1.5rem 1rem;
+            }
+            
+            .recommended-plan {
+                padding: 1.25rem;
+            }
+            
             .results-summary {
                 grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Safe area insets for notched devices */
+        @supports (padding: max(0px)) {
+            .wizard-page {
+                padding-bottom: max(2rem, env(safe-area-inset-bottom));
+            }
+        }
+        
+        /* Touch device optimizations */
+        @media (pointer: coarse) {
+            .goal-card,
+            .level-card,
+            .equipment-card,
+            .wizard-nav button {
+                min-height: 48px;
+            }
+            
+            .slider::-webkit-slider-thumb {
+                width: 36px;
+                height: 36px;
+            }
+        }
+        
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .wizard-step {
+                animation: none;
+            }
+            
+            .goal-card,
+            .level-card,
+            .equipment-card,
+            .btn-next,
+            .btn-back {
+                transition: none;
             }
         }
     </style>
@@ -545,30 +846,30 @@
                 <p>Wähle das Ziel, das am besten zu dir passt.</p>
             </div>
             <div class="goal-cards">
-                <div class="goal-card" onclick="selectGoal(this, 'muskelaufbau')">
+                <div class="goal-card" onclick="selectGoal(this, 'muskelaufbau')" role="button" tabindex="0">
                     <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=500&q=80" alt="Muskelaufbau">
                     <div class="goal-card-overlay">
                         <h3>Muskelaufbau</h3>
-                        <p>Mehr Masse und Kraft aufbauen</p>
+                        <p>Mehr Masse und Kraft</p>
                     </div>
                 </div>
-                <div class="goal-card" onclick="selectGoal(this, 'fettabbau')">
+                <div class="goal-card" onclick="selectGoal(this, 'fettabbau')" role="button" tabindex="0">
                     <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500&q=80" alt="Fettabbau">
                     <div class="goal-card-overlay">
                         <h3>Fettabbau</h3>
                         <p>Definieren und Fett verlieren</p>
                     </div>
                 </div>
-                <div class="goal-card" onclick="selectGoal(this, 'fitness')">
+                <div class="goal-card" onclick="selectGoal(this, 'fitness')" role="button" tabindex="0">
                     <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&q=80" alt="Fitness">
                     <div class="goal-card-overlay">
                         <h3>Fitness</h3>
-                        <p>Allgemeine Fitness und Wohlbefinden</p>
+                        <p>Allgemeine Fitness</p>
                     </div>
                 </div>
             </div>
             <div class="wizard-nav">
-                <button class="btn-next" onclick="nextStep(1)" id="btn1" disabled>Weiter →</button>
+                <button class="btn-next" onclick="nextStep(1)" id="btn1" disabled> Weiter →</button>
             </div>
         </div>
 
@@ -588,7 +889,7 @@
                         <span>7 Tage</span>
                     </div>
                 </div>
-                <p id="freqHint" style="color: var(--text-muted); margin-top: 1rem;">3 Tage pro Woche – eine gute Balance für die meisten Ziele.</p>
+                <p id="freqHint">3 Tage pro Woche – eine gute Balance für die meisten Ziele.</p>
             </div>
             <div class="wizard-nav">
                 <button class="btn-back" onclick="prevStep(2)">← Zurück</button>
@@ -603,20 +904,26 @@
                 <p>Schätze deine Trainingserfahrung ein.</p>
             </div>
             <div class="level-cards">
-                <div class="level-card" onclick="selectLevel(this, 'anfaenger')">
+                <div class="level-card" onclick="selectLevel(this, 'anfaenger')" role="button" tabindex="0">
                     <div class="level-icon">🌱</div>
-                    <h3>Anfänger</h3>
-                    <p>weniger als 1 Jahr Erfahrung</p>
+                    <div>
+                        <h3>Anfänger</h3>
+                        <p>weniger als 1 Jahr</p>
+                    </div>
                 </div>
-                <div class="level-card" onclick="selectLevel(this, 'fortgeschritten')">
+                <div class="level-card" onclick="selectLevel(this, 'fortgeschritten')" role="button" tabindex="0">
                     <div class="level-icon">💪</div>
-                    <h3>Fortgeschritten</h3>
-                    <p>1–3 Jahre Erfahrung</p>
+                    <div>
+                        <h3>Fortgeschritten</h3>
+                        <p>1–3 Jahre</p>
+                    </div>
                 </div>
-                <div class="level-card" onclick="selectLevel(this, 'profi')">
+                <div class="level-card" onclick="selectLevel(this, 'profi')" role="button" tabindex="0">
                     <div class="level-icon">🏆</div>
-                    <h3>Profi</h3>
-                    <p>mehr als 3 Jahre Erfahrung</p>
+                    <div>
+                        <h3>Profi</h3>
+                        <p>mehr als 3 Jahre</p>
+                    </div>
                 </div>
             </div>
             <div class="wizard-nav">
@@ -629,7 +936,7 @@
         <div class="wizard-step" id="step4">
             <div class="step-header">
                 <h2>Über dich (optional)</h2>
-                <p>Diese Daten helfen uns, den Plan besser anzupassen.</p>
+                <p>Diese Daten helfen uns, den Plan anzupassen.</p>
             </div>
             <div class="data-form">
                 <div class="form-row">
@@ -658,10 +965,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="limitations">Einschränkungen (optional)</label>
-                    <textarea id="limitations" placeholder="z.B. Knieprobleme, Rückenprobleme..." rows="3"></textarea>
+                    <label for="limitations">Einschränkungen</label>
+                    <textarea id="limitations" placeholder="z.B. Knieprobleme, Rücken..." rows="2"></textarea>
                 </div>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem;">* Alle Angaben sind freiwillig und werden nicht gespeichert.</p>
+                <p class="privacy-note">* Alle Angaben sind freiwillig und werden nicht gespeichert.</p>
             </div>
             <div class="wizard-nav">
                 <button class="btn-back" onclick="prevStep(4)">← Zurück</button>
@@ -676,25 +983,31 @@
                 <p>Wähle deine Trainingsumgebung.</p>
             </div>
             <div class="equipment-cards">
-                <div class="equipment-card" onclick="selectEquipment(this, 'gym')">
+                <div class="equipment-card" onclick="selectEquipment(this, 'gym')" role="button" tabindex="0">
                     <div class="equipment-icon">🏋️</div>
-                    <h3>Fitnessstudio</h3>
-                    <p>Vollständige Geräteausstattung</p>
+                    <div>
+                        <h3>Fitnessstudio</h3>
+                        <p>Vollständige Ausstattung</p>
+                    </div>
                 </div>
-                <div class="equipment-card" onclick="selectEquipment(this, 'home')">
+                <div class="equipment-card" onclick="selectEquipment(this, 'home')" role="button" tabindex="0">
                     <div class="equipment-icon">🏠</div>
-                    <h3>Home Gym</h3>
-                    <p>Grundausstattung (Kurzhanteln, Bank, etc.)</p>
+                    <div>
+                        <h3>Home Gym</h3>
+                        <p>Grundausstattung</p>
+                    </div>
                 </div>
-                <div class="equipment-card" onclick="selectEquipment(this, 'bodyweight')">
+                <div class="equipment-card" onclick="selectEquipment(this, 'bodyweight')" role="button" tabindex="0">
                     <div class="equipment-icon">🧘</div>
-                    <h3>Bodyweight</h3>
-                    <p>Nur Körpergewicht, keine Geräte</p>
+                    <div>
+                        <h3>Bodyweight</h3>
+                        <p>Nur Körpergewicht</p>
+                    </div>
                 </div>
             </div>
             <div class="wizard-nav">
                 <button class="btn-back" onclick="prevStep(5)">← Zurück</button>
-                <button class="btn-next" onclick="showResults()" id="btn5" disabled>Ergebnis anzeigen →</button>
+                <button class="btn-next" onclick="showResults()" id="btn5" disabled>Ergebnis →</button>
             </div>
         </div>
 
@@ -705,13 +1018,9 @@
                 <p>Basierend auf deinen Angaben empfehle ich dir:</p>
             </div>
             
-            <div class="results-summary" id="resultsSummary">
-                <!-- Filled by JS -->
-            </div>
+            <div class="results-summary" id="resultsSummary"></div>
             
-            <div class="recommended-plan" id="recommendedPlan">
-                <!-- Filled by JS -->
-            </div>
+            <div class="recommended-plan" id="recommendedPlan"></div>
             
             <div class="results-actions">
                 <a href="kontakt.html" class="btn-primary btn-large">Beratung anfragen →</a>
@@ -780,7 +1089,7 @@
                 4: '4 Tage pro Woche – ambitioniert und effektiv.',
                 5: '5 Tage pro Woche – sehr ambitioniert!',
                 6: '6 Tage pro Woche – für wirklich Engagierte.',
-                7: '7 Tage pro Woche – nur für Profis empfehlenswert.'
+                7: '7 Tage – nur für Profis empfehlenswert.'
             };
             document.getElementById('freqHint').textContent = hints[val];
         }
@@ -800,7 +1109,6 @@
         }
 
         function nextStep(current) {
-            // Save data from step 4
             if (current === 4) {
                 wizardData.data = {
                     age: document.getElementById('age').value,
@@ -829,10 +1137,9 @@
             document.getElementById('stepResults').classList.add('active');
             updateProgress(6);
             
-            // Build summary
             const goalLabels = { muskelaufbau: 'Muskelaufbau', fettabbau: 'Fettabbau', fitness: 'Fitness' };
             const levelLabels = { anfaenger: 'Anfänger', fortgeschritten: 'Fortgeschritten', profi: 'Profi' };
-            const equipLabels = { gym: 'Fitnessstudio', home: 'Home Gym', bodyweight: 'Bodyweight' };
+            const equipLabels = { gym: 'Studio', home: 'Home', bodyweight: 'Bodyweight' };
             
             document.getElementById('resultsSummary').innerHTML = `
                 <div class="summary-item">
@@ -852,57 +1159,38 @@
                     <div class="value">${equipLabels[wizardData.equipment]}</div>
                 </div>
                 <div class="summary-item">
-                    <div class="label">Plan-Typ</div>
+                    <div class="label">Plan</div>
                     <div class="value">Premium</div>
                 </div>
             `;
             
-            // Build recommended plan
             const plans = {
                 muskelaufbau: {
                     name: 'Muskelaufbau Premium',
                     price: '49',
                     period: 'einmalig',
-                    desc: 'Ein strukturierter 12-Wochen-Plan für maximales Muskelwachstum. Mit progressiver Belastungssteigerung, Übungsvideos und Ernährungsleitfaden.',
-                    features: [
-                        '12-Wochen Trainingsplan',
-                        'Übungsvideos mit Anleitung',
-                        'Makro-Rechner für Ernährung',
-                        'Wochenweise Progression',
-                        'Support via E-Mail'
-                    ]
+                    desc: '12-Wochen-Plan für maximales Muskelwachstum mit progressiver Belastungssteigerung und Übungsvideos.',
+                    features: ['12-Wochen Trainingsplan', 'Übungsvideos', 'Makro-Rechner', 'Wochenweise Progression', 'E-Mail Support']
                 },
                 fettabbau: {
                     name: 'Fatburn Programm',
                     price: '39',
                     period: 'einmalig',
-                    desc: 'Effektives Programm für nachhaltigen Fettabbau mit Kombination aus Cardio- und Krafttraining. Kaloriendefizit strategisch geplant.',
-                    features: [
-                        '8-Wochen Fatburn-Plan',
-                        'HIIT-Einheiten inklusive',
-                        'Kalorienrechner',
-                        'Meal Prep Leitfaden',
-                        'Wöchentliche Check-ins'
-                    ]
+                    desc: 'Effektives 8-Wochen-Programm für nachhaltigen Fettabbau mit Cardio- und Krafttraining.',
+                    features: ['8-Wochen Fatburn-Plan', 'HIIT-Einheiten', 'Kalorienrechner', 'Meal Prep Leitfaden', 'Wöchentliche Check-ins']
                 },
                 fitness: {
                     name: 'Fitness Grundprogramm',
                     price: '29',
                     period: 'einmalig',
-                    desc: 'Ausgewogener Trainingsplan für allgemeine Fitness und Wohlbefinden. Perfekt für den Einstieg ins regelmäßige Training.',
-                    features: [
-                        '8-Wochen Trainingsplan',
-                        'Ganzkörpertraining',
-                        'Flexibility-Übungen',
-                        'Stressmanagement-Tipps',
-                        'Progressionsplan'
-                    ]
+                    desc: 'Ausgewogener 8-Wochen-Plan für allgemeine Fitness und Wohlbefinden. Perfekt für den Einstieg.',
+                    features: ['8-Wochen Trainingsplan', 'Ganzkörpertraining', 'Flexibility-Übungen', 'Stressmanagement', 'Progressionsplan']
                 }
             };
             
             const plan = plans[wizardData.goal];
             document.getElementById('recommendedPlan').innerHTML = `
-                <span class="plan-badge">Empfohlen für dich</span>
+                <span class="plan-badge">Empfohlen</span>
                 <div class="plan-header">
                     <h3>${plan.name}</h3>
                     <div class="plan-price">
@@ -936,6 +1224,15 @@
             document.getElementById('step1').classList.add('active');
             updateProgress(1);
         }
+
+        // Keyboard accessibility for cards
+        document.querySelectorAll('.goal-card, .level-card, .equipment-card').forEach(card => {
+            card.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    this.click();
+                }
+            });
+        });
     </script>
 </body>
 </html>
