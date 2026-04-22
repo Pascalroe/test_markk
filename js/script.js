@@ -4,61 +4,42 @@
 
 // Mobile Navigation Toggle
 function toggleMobileNav(event) {
-    // Prevent any default behavior
     if (event) event.preventDefault();
     
     const navToggle = document.querySelector('.nav-toggle');
     const navLinks = document.querySelector('.nav-links');
-    const overlay = document.querySelector('.nav-overlay');
-    const body = document.body;
     
-    const isOpen = navLinks.classList.toggle('active');
-    navToggle.classList.toggle('active');
+    const isOpen = navToggle.classList.toggle('active');
+    navLinks.classList.toggle('active');
     
-    if (overlay) {
-        overlay.classList.toggle('active');
-    }
-    
-    body.classList.toggle('menu-open', isOpen);
+    document.body.classList.toggle('menu-open', isOpen);
     
     navToggle.setAttribute('aria-expanded', isOpen);
-    navToggle.setAttribute('aria-label', isOpen ? 'Navigation schließen' : 'Navigation öffnen');
+    navToggle.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
 }
 
 function closeMobileNav() {
     const navToggle = document.querySelector('.nav-toggle');
     const navLinks = document.querySelector('.nav-links');
-    const overlay = document.querySelector('.nav-overlay');
-    const body = document.body;
     
-    navLinks.classList.remove('active');
     navToggle.classList.remove('active');
-    if (overlay) overlay.classList.remove('active');
-    body.classList.remove('menu-open');
+    navLinks.classList.remove('active');
+    document.body.classList.remove('menu-open');
     navToggle.setAttribute('aria-expanded', 'false');
-    navToggle.setAttribute('aria-label', 'Navigation öffnen');
+    navToggle.setAttribute('aria-label', 'Menü öffnen');
 }
 
 // Initialize mobile navigation
 document.addEventListener('DOMContentLoaded', function() {
     const navToggle = document.querySelector('.nav-toggle');
-    const overlay = document.querySelector('.nav-overlay');
+    const navLinks = document.querySelectorAll('.nav-links a');
     
     // Click handler on burger button
     if (navToggle) {
         navToggle.addEventListener('click', toggleMobileNav);
-        // Also support touchstart for faster mobile response
-        navToggle.addEventListener('touchstart', toggleMobileNav, { passive: false });
-    }
-    
-    // Close menu when clicking overlay
-    if (overlay) {
-        overlay.addEventListener('click', closeMobileNav);
-        overlay.addEventListener('touchstart', closeMobileNav, { passive: false });
     }
     
     // Close menu when clicking a link
-    const navLinks = document.querySelectorAll('.nav-links a');
     navLinks.forEach(link => {
         link.addEventListener('click', closeMobileNav);
     });
