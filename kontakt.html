@@ -4,247 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kontakt – mk</title>
+    <meta name="description" content="Schreib uns eine Nachricht. Wir antworten innerhalb von 24 Stunden.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* Kontakt Specific Styles */
-        .kontakt-hero {
-            min-height: 40vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 8rem 2rem 4rem;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--primary) 50%, var(--secondary) 100%);
-        }
-        
-        .kontakt-hero h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 1rem;
-        }
-        
-        .kontakt-hero p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 600px;
-        }
-        
-        .kontakt-container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-        }
-        
-        .contact-form {
-            background: var(--bg-glass);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 2.5rem;
-        }
-        
-        .contact-form h2 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-        
-        .contact-form > p {
-            color: var(--text-muted);
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-        
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 1rem;
-            border-radius: 12px;
-            border: 2px solid var(--border);
-            background: var(--bg-dark);
-            color: var(--text);
-            font-size: 1rem;
-            font-family: var(--font-body);
-            transition: var(--transition);
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-        
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: var(--text-muted);
-        }
-        
-        .form-group textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-        
-        .contact-form .btn-primary {
-            width: 100%;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-        
-        .contact-info {
-            text-align: center;
-            margin-top: 3rem;
-            padding: 2rem;
-            background: var(--bg-glass);
-            border-radius: 16px;
-        }
-        
-        .contact-info h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
-        
-        .contact-info p {
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
-        }
-        
-        .contact-info a {
-            color: var(--accent);
-        }
-        
-        .success-message {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-            background: rgba(74, 222, 128, 0.1);
-            border: 1px solid var(--success);
-            border-radius: 16px;
-            margin-top: 2rem;
-        }
-        
-        .success-message.show {
-            display: block;
-        }
-        
-        .success-message h3 {
-            color: var(--success);
-            margin-bottom: 0.5rem;
-        }
-        
-        @media (max-width: 768px) {
-            .kontakt-hero {
-                padding: 6rem 1.5rem 3rem;
-                min-height: auto;
-            }
-            
-            .contact-form {
-                padding: 1.5rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/nav.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="faq-nav">
-        <a href="index.html" class="nav-logo">mk</a>
+    <nav class="main-nav">
+        <a href="index.html" class="nav-logo">
+            <img src="images/logo.svg" alt="mk" height="32">
+            <span>mk</span>
+        </a>
+        <button class="nav-toggle" onclick="toggleMobileNav()">
+            <span></span><span></span><span></span>
+        </button>
         <div class="nav-links">
-            <a href="index.html">Startseite</a>
+            <a href="index.html">Start</a>
+            <a href="uebersicht.html">Übersicht</a>
+            <a href="ueber-mich.html">Über mich</a>
+            <a href="erfolge.html">Erfolge</a>
             <a href="faq.html">FAQ</a>
             <a href="kontakt.html" class="active">Kontakt</a>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <section class="kontakt-hero">
-        <div>
+    <section class="page-header">
+        <div class="container">
             <h1>Kontakt</h1>
-            <p>Schreib uns – wir freuen uns von dir zu hören.</p>
+            <p>Fragen, Anregungen oder just say hello – ich freue mich von dir zu hören.</p>
         </div>
     </section>
 
-    <!-- Contact Form -->
-    <div class="kontakt-container">
-        <div class="contact-form" id="contactForm">
-            <h2>Schreib uns eine Nachricht</h2>
-            <p>Wir antworten in der Regel innerhalb von 24 Stunden.</p>
-            
-            <form onsubmit="submitContact(event)">
-                <div class="form-group">
-                    <label for="name">Name *</label>
-                    <input type="text" id="name" name="name" required placeholder="Dein Name">
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-form-wrapper">
+                    <h2>Schreib mir</h2>
+                    <form id="contactForm" onsubmit="submitContact(event)">
+                        <div class="form-group">
+                            <label for="name">Name *</label>
+                            <input type="text" id="name" name="name" required placeholder="Dein Name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">E-Mail *</label>
+                            <input type="email" id="email" name="email" required placeholder="deine@email.de">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="goal">Zielauswahl (optional)</label>
+                            <select id="goal" name="goal">
+                                <option value="">Bitte wählen...</option>
+                                <option value="muskelaufbau">Muskelaufbau</option>
+                                <option value="fettabbau">Fettabbau</option>
+                                <option value="fitness">Allgemeine Fitness</option>
+                                <option value="coaching">1:1 Coaching</option>
+                                <option value="sonstiges">Sonstiges</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Nachricht *</label>
+                            <textarea id="message" name="message" required placeholder="Wie kann ich dir helfen?"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary btn-large btn-block">
+                            Nachricht senden
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
+                    </form>
+                    
+                    <div class="success-message" id="successMessage">
+                        <h3>✓ Nachricht gesendet!</h3>
+                        <p>Danke für deine Nachricht. Ich melde mich innerhalb von 24 Stunden.</p>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="email">E-Mail *</label>
-                    <input type="email" id="email" name="email" required placeholder="deine@email.de">
+                <div class="contact-info">
+                    <h2>Oder schreib direkt</h2>
+                    <div class="info-item">
+                        <span class="info-icon">📧</span>
+                        <div>
+                            <strong>E-Mail</strong>
+                            <a href="mailto:info@mk-fitness.de">info@mk-fitness.de</a>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <strong>Standort</strong>
+                            <p>Freiburg, Deutschland</p>
+                            <p>(Beratung vor Ort nach Vereinbarung)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-icon">⏱️</span>
+                        <div>
+                            <strong>Antwortzeit</strong>
+                            <p>In der Regel innerhalb von 24 Stunden</p>
+                        </div>
+                    </div>
+                    
+                    <div class="map-placeholder">
+                        [PLATZHALTER_BILD: Karte – Google Maps Integration]
+                        <p>Google Maps (DSGVO-konform)</p>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="betreff">Betreff</label>
-                    <select id="betreff" name="betreff">
-                        <option value="">Bitte wählen...</option>
-                        <option value="beratung">Beratung / Coaching</option>
-                        <option value="plan">Trainingsplan</option>
-                        <option value="frage">Allgemeine Frage</option>
-                        <option value="feedback">Feedback</option>
-                        <option value="sonstiges">Sonstiges</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="nachricht">Nachricht *</label>
-                    <textarea id="nachricht" name="nachricht" required placeholder="Wie können wir dir helfen?"></textarea>
-                </div>
-                
-                <button type="submit" class="btn-primary">
-                    <span>Nachricht senden</span>
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-            </form>
+            </div>
         </div>
-        
-        <div class="success-message" id="successMessage">
-            <h3>✓ Nachricht gesendet!</h3>
-            <p>Wir melden uns innerhalb von 24 Stunden bei dir.</p>
-        </div>
-        
-        <div class="contact-info">
-            <h3>Alternativ erreichst du uns unter:</h3>
-            <p>📧 <a href="mailto:info@mk-fitness.de">info@mk-fitness.de</a></p>
-            <p>📍 Freiburg, Deutschland</p>
-        </div>
-    </div>
+    </section>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-brand">
-                <h3><img src="images/logo.svg" alt="mk" height="28" style="vertical-align: middle;"> mk</h3>
-                <p>Dein Partner für personalisierte Fitnesslösungen</p>
+                <img src="images/logo.svg" alt="mk" height="40">
+                <p>Dein personalisierter Fitness-Guide</p>
             </div>
             <div class="footer-links">
-                <a href="index.html">Startseite</a>
+                <a href="index.html">Start</a>
+                <a href="uebersicht.html">Übersicht</a>
+                <a href="ueber-mich.html">Über mich</a>
+                <a href="erfolge.html">Erfolge</a>
                 <a href="faq.html">FAQ</a>
                 <a href="kontakt.html">Kontakt</a>
-            </div>
-            <div class="footer-contact">
-                <p>📧 info@mk-fitness.de</p>
-                <p>📍 Freiburg, Deutschland</p>
             </div>
             <div class="footer-legal">
                 <a href="impressum.html">Impressum</a>
@@ -256,23 +142,21 @@
         </div>
     </footer>
 
+    <script src="js/script.js"></script>
     <script>
         function submitContact(e) {
             e.preventDefault();
-            
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
-            const betreff = document.getElementById('betreff').value;
-            const nachricht = document.getElementById('nachricht').value;
+            const goal = document.getElementById('goal').value;
+            const message = document.getElementById('message').value;
             
-            // Create mailto link
-            const subject = betreff ? `mk: ${betreff}` : 'mk Kontakt';
-            const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0ABetreff: ${betreff}%0D%0A%0D%0A${nachricht}`;
+            const subject = goal ? `mk: ${goal}` : 'mk Kontakt';
+            const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0AZiel: ${goal}%0D%0A%0D%0A${message}`;
             window.location.href = `mailto:info@mk-fitness.de?subject=${encodeURIComponent(subject)}&body=${body}`;
             
-            // Show success
             document.getElementById('contactForm').style.display = 'none';
-            document.getElementById('successMessage').classList.add('show');
+            document.getElementById('successMessage').style.display = 'block';
         }
     </script>
 </body>

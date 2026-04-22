@@ -8,67 +8,75 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/nav.css">
 </head>
 <body>
-    <nav class="faq-nav">
-        <a href="index.html" class="nav-logo">mk</a>
+    <nav class="main-nav">
+        <a href="index.html" class="nav-logo">
+            <img src="images/logo.svg" alt="mk" height="32">
+            <span>mk</span>
+        </a>
+        <button class="nav-toggle" onclick="toggleMobileNav()">
+            <span></span><span></span><span></span>
+        </button>
         <div class="nav-links">
-            <a href="index.html">Startseite</a>
+            <a href="index.html">Start</a>
+            <a href="uebersicht.html">Übersicht</a>
+            <a href="ueber-mich.html">Über mich</a>
+            <a href="erfolge.html">Erfolge</a>
             <a href="faq.html">FAQ</a>
             <a href="kontakt.html">Kontakt</a>
         </div>
     </nav>
 
-    <section class="faq-hero">
-        <div>
+    <section class="page-header">
+        <div class="container">
             <h1>Impressum</h1>
         </div>
     </section>
 
-    <div class="faq-container">
-        <div class="faq-item" style="background: var(--bg-glass); border: 1px solid var(--border); padding: 1.5rem; border-radius: 16px;">
-            <h2 style="font-size: 1.2rem; margin-bottom: 1rem; color: var(--text);">Angaben gemäß § 5 TMG</h2>
-            <p style="color: var(--text-muted); line-height: 1.8;">
-                <strong>mk</strong><br>
+    <section class="legal-section">
+        <div class="container">
+            <div class="legal-content">
+                <h2>Angaben gemäß § 5 TMG</h2>
+                <p><strong>mk – Personalisierte Fitnesslösungen</strong><br>
                 Inhaber: Max Musterman<br>
                 Belfortstraße 26<br>
                 79098 Freiburg im Breisgau<br>
-                Deutschland
-            </p>
-            
-            <h2 style="font-size: 1.2rem; margin: 1.5rem 0 1rem; color: var(--text);">Kontakt</h2>
-            <p style="color: var(--text-muted); line-height: 1.8;">
-                E-Mail: info@mk-fitness.de<br>
-                Telefon: +49 (0) 761 123 4567
-            </p>
-            
-            <h2 style="font-size: 1.2rem; margin: 1.5rem 0 1rem; color: var(--text);">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
-            <p style="color: var(--text-muted); line-height: 1.8;">
-                Max Musterman<br>
+                Deutschland</p>
+                
+                <h2>Kontakt</h2>
+                <p>E-Mail: info@mk-fitness.de<br>
+                Telefon: +49 (0) 761 123 4567</p>
+                
+                <h2>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
+                <p>Max Musterman<br>
                 Belfortstraße 26<br>
-                79098 Freiburg im Breisgau
-            </p>
-            
-            <h2 style="font-size: 1.2rem; margin: 1.5rem 0 1rem; color: var(--text);">Haftung für Inhalte</h2>
-            <p style="color: var(--text-muted); line-height: 1.8;">
-                Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
-            </p>
-            
-            <h2 style="font-size: 1.2rem; margin: 1.5rem 0 1rem; color: var(--text);">Bildrechte</h2>
-            <p style="color: var(--text-muted); line-height: 1.8;">
-                Die auf dieser Website verwendeten Bilder stammen von Unsplash (lizenzfrei) oder wurden selbst erstellt.
-            </p>
+                79098 Freiburg im Breisgau</p>
+                
+                <h2>Haftung für Inhalte</h2>
+                <p>Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
+                
+                <h2>Urheberrecht</h2>
+                <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p>
+                
+                <h2>Bildrechte</h2>
+                <p>Die auf dieser Website verwendeten Bilder stammen von Unsplash (lizenzfrei) oder wurden selbst erstellt.</p>
+            </div>
         </div>
-    </div>
+    </section>
 
     <footer>
         <div class="footer-content">
             <div class="footer-brand">
-                <h3><img src="images/logo.svg" alt="mk" height="28" style="vertical-align: middle;"> mk</h3>
-                <p>Dein Partner für personalisierte Fitnesslösungen</p>
+                <img src="images/logo.svg" alt="mk" height="40">
+                <p>Dein personalisierter Fitness-Guide</p>
             </div>
             <div class="footer-links">
-                <a href="index.html">Startseite</a>
+                <a href="index.html">Start</a>
+                <a href="uebersicht.html">Übersicht</a>
+                <a href="ueber-mich.html">Über mich</a>
+                <a href="erfolge.html">Erfolge</a>
                 <a href="faq.html">FAQ</a>
                 <a href="kontakt.html">Kontakt</a>
             </div>
@@ -81,5 +89,7 @@
             <p>© 2024 mk. Alle Rechte vorbehalten.</p>
         </div>
     </footer>
+
+    <script src="js/script.js"></script>
 </body>
 </html>

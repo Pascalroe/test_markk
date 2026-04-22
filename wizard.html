@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dein Plan – mk</title>
+    <meta name="description" content="Finde in 5 Schritten deinen personalisierten Trainingsplan.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <style>
+        /* Wizard specific */
+        .wizard-page {
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+        
+        .wizard-progress {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(15, 15, 26, 0.98);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .progress-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            width: 20%;
+            transition: width 0.4s ease;
+        }
+        
+        .progress-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        
+        .wizard-step {
+            display: none;
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .wizard-step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .step-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .step-header p {
+            color: var(--text-muted);
+        }
+        
+        /* Step 1: Goal Cards */
+        .goal-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .goal-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .goal-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+        
+        .goal-card.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(233, 69, 96, 0.3);
+        }
+        
+        .goal-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .goal-card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(transparent, rgba(15, 15, 26, 0.95));
+        }
+        
+        .goal-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .goal-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        /* Step 2: Frequency Slider */
+        .frequency-control {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--bg-glass);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+        
+        .frequency-value {
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+        
+        .frequency-label {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+        
+        .slider-container {
+            max-width: 400px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: var(--border);
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(233, 69, 96, 0.4);
+        }
+        
+        .frequency-days {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        /* Step 3: Level */
+        .level-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .level-card {
+            padding: 2rem;
+            background: var(--bg-glass);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .level-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .level-card.selected {
+            border-color: var(--accent);
+            background: rgba(233, 69, 96, 0.1);
+        }
+        
+        .level-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .level-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .level-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        /* Step 4: Data */
+        .data-form {
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--bg-glass);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        /* Step 5: Equipment */
+        .equipment-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .equipment-card {
+            padding: 2rem;
+            background: var(--bg-glass);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .equipment-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .equipment-card.selected {
+            border-color: var(--accent);
+            background: rgba(233, 69, 96, 0.1);
+        }
+        
+        .equipment-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .equipment-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .equipment-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        /* Wizard Navigation */
+        .wizard-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        
+        .wizard-nav button {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-back {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+        
+        .btn-back:hover {
+            border-color: var(--accent);
+        }
+        
+        .btn-next {
+            background: var(--accent);
+            border: none;
+            color: white;
+        }
+        
+        .btn-next:hover {
+            background: var(--accent-light);
+        }
+        
+        /* Results */
+        .results-header {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--bg-glass);
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+        
+        .results-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .results-header p {
+            color: var(--text-muted);
+        }
+        
+        .results-summary {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .summary-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg-glass);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .summary-item .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+        
+        .summary-item .value {
+            font-weight: 600;
+        }
+        
+        .recommended-plan {
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.15), rgba(255, 107, 107, 0.15));
+            border: 2px solid var(--accent);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .plan-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        
+        .plan-header h3 {
+            font-size: 1.8rem;
+        }
+        
+        .plan-price {
+            text-align: right;
+        }
+        
+        .plan-price .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .plan-price .period {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        .plan-description {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .plan-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+        
+        .plan-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text);
+        }
+        
+        .plan-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .results-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .btn-reset {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn-reset:hover {
+            border-color: var(--accent);
+        }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .wizard-progress {
+                padding: 0.75rem 1rem;
+            }
+            
+            .wizard-step {
+                padding: 1.5rem 1rem;
+            }
+            
+            .goal-cards,
+            .level-cards,
+            .equipment-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .goal-card img {
+                height: 180px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-summary {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .plan-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-actions {
+                flex-direction: column;
+            }
+            
+            .results-actions .btn-primary,
+            .results-actions .btn-reset {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .results-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <a href="index.html" class="nav-logo">
+            <img src="images/logo.svg" alt="mk" height="32">
+            <span>mk</span>
+        </a>
+        <button class="nav-toggle" onclick="toggleMobileNav()">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links">
+            <a href="index.html">Start</a>
+            <a href="uebersicht.html">Übersicht</a>
+            <a href="ueber-mich.html">Über mich</a>
+            <a href="erfolge.html">Erfolge</a>
+            <a href="faq.html">FAQ</a>
+            <a href="kontakt.html">Kontakt</a>
+        </div>
+    </nav>
+
+    <div class="wizard-page">
+        <div class="wizard-progress">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p class="progress-text" id="progressText">Schritt 1 von 5</p>
+            </div>
+        </div>
+
+        <!-- Step 1: Goal -->
+        <div class="wizard-step active" id="step1">
+            <div class="step-header">
+                <h2>Was ist dein Ziel?</h2>
+                <p>Wähle das Ziel, das am besten zu dir passt.</p>
+            </div>
+            <div class="goal-cards">
+                <div class="goal-card" onclick="selectGoal(this, 'muskelaufbau')">
+                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=500&q=80" alt="Muskelaufbau">
+                    <div class="goal-card-overlay">
+                        <h3>Muskelaufbau</h3>
+                        <p>Mehr Masse und Kraft aufbauen</p>
+                    </div>
+                </div>
+                <div class="goal-card" onclick="selectGoal(this, 'fettabbau')">
+                    <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500&q=80" alt="Fettabbau">
+                    <div class="goal-card-overlay">
+                        <h3>Fettabbau</h3>
+                        <p>Definieren und Fett verlieren</p>
+                    </div>
+                </div>
+                <div class="goal-card" onclick="selectGoal(this, 'fitness')">
+                    <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&q=80" alt="Fitness">
+                    <div class="goal-card-overlay">
+                        <h3>Fitness</h3>
+                        <p>Allgemeine Fitness und Wohlbefinden</p>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-nav">
+                <button class="btn-next" onclick="nextStep(1)" id="btn1" disabled>Weiter →</button>
+            </div>
+        </div>
+
+        <!-- Step 2: Frequency -->
+        <div class="wizard-step" id="step2">
+            <div class="step-header">
+                <h2>Wie oft trainierst du?</h2>
+                <p>Wähle deine Trainingshäufigkeit pro Woche.</p>
+            </div>
+            <div class="frequency-control">
+                <div class="frequency-value" id="freqValue">3</div>
+                <div class="frequency-label">Tage pro Woche</div>
+                <div class="slider-container">
+                    <input type="range" class="slider" id="freqSlider" min="1" max="7" value="3" oninput="updateFrequency()">
+                    <div class="frequency-days">
+                        <span>1 Tag</span>
+                        <span>7 Tage</span>
+                    </div>
+                </div>
+                <p id="freqHint" style="color: var(--text-muted); margin-top: 1rem;">3 Tage pro Woche – eine gute Balance für die meisten Ziele.</p>
+            </div>
+            <div class="wizard-nav">
+                <button class="btn-back" onclick="prevStep(2)">← Zurück</button>
+                <button class="btn-next" onclick="nextStep(2)">Weiter →</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Level -->
+        <div class="wizard-step" id="step3">
+            <div class="step-header">
+                <h2>Was ist dein Level?</h2>
+                <p>Schätze deine Trainingserfahrung ein.</p>
+            </div>
+            <div class="level-cards">
+                <div class="level-card" onclick="selectLevel(this, 'anfaenger')">
+                    <div class="level-icon">🌱</div>
+                    <h3>Anfänger</h3>
+                    <p>weniger als 1 Jahr Erfahrung</p>
+                </div>
+                <div class="level-card" onclick="selectLevel(this, 'fortgeschritten')">
+                    <div class="level-icon">💪</div>
+                    <h3>Fortgeschritten</h3>
+                    <p>1–3 Jahre Erfahrung</p>
+                </div>
+                <div class="level-card" onclick="selectLevel(this, 'profi')">
+                    <div class="level-icon">🏆</div>
+                    <h3>Profi</h3>
+                    <p>mehr als 3 Jahre Erfahrung</p>
+                </div>
+            </div>
+            <div class="wizard-nav">
+                <button class="btn-back" onclick="prevStep(3)">← Zurück</button>
+                <button class="btn-next" onclick="nextStep(3)" id="btn3" disabled>Weiter →</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Data -->
+        <div class="wizard-step" id="step4">
+            <div class="step-header">
+                <h2>Über dich (optional)</h2>
+                <p>Diese Daten helfen uns, den Plan besser anzupassen.</p>
+            </div>
+            <div class="data-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="age">Alter</label>
+                        <input type="number" id="age" placeholder="z.B. 28" min="14" max="99">
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Gewicht (kg)</label>
+                        <input type="number" id="weight" placeholder="z.B. 75" min="40" max="200">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="height">Größe (cm)</label>
+                        <input type="number" id="height" placeholder="z.B. 180" min="140" max="220">
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Geschlecht</label>
+                        <select id="gender">
+                            <option value="">Bitte wählen</option>
+                            <option value="m">Männlich</option>
+                            <option value="w">Weiblich</option>
+                            <option value="d">Divers</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="limitations">Einschränkungen (optional)</label>
+                    <textarea id="limitations" placeholder="z.B. Knieprobleme, Rückenprobleme..." rows="3"></textarea>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem;">* Alle Angaben sind freiwillig und werden nicht gespeichert.</p>
+            </div>
+            <div class="wizard-nav">
+                <button class="btn-back" onclick="prevStep(4)">← Zurück</button>
+                <button class="btn-next" onclick="nextStep(4)">Weiter →</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Equipment -->
+        <div class="wizard-step" id="step5">
+            <div class="step-header">
+                <h2>Was hast du zur Verfügung?</h2>
+                <p>Wähle deine Trainingsumgebung.</p>
+            </div>
+            <div class="equipment-cards">
+                <div class="equipment-card" onclick="selectEquipment(this, 'gym')">
+                    <div class="equipment-icon">🏋️</div>
+                    <h3>Fitnessstudio</h3>
+                    <p>Vollständige Geräteausstattung</p>
+                </div>
+                <div class="equipment-card" onclick="selectEquipment(this, 'home')">
+                    <div class="equipment-icon">🏠</div>
+                    <h3>Home Gym</h3>
+                    <p>Grundausstattung (Kurzhanteln, Bank, etc.)</p>
+                </div>
+                <div class="equipment-card" onclick="selectEquipment(this, 'bodyweight')">
+                    <div class="equipment-icon">🧘</div>
+                    <h3>Bodyweight</h3>
+                    <p>Nur Körpergewicht, keine Geräte</p>
+                </div>
+            </div>
+            <div class="wizard-nav">
+                <button class="btn-back" onclick="prevStep(5)">← Zurück</button>
+                <button class="btn-next" onclick="showResults()" id="btn5" disabled>Ergebnis anzeigen →</button>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="wizard-step" id="stepResults">
+            <div class="results-header">
+                <h2>Dein personalisierter Plan</h2>
+                <p>Basierend auf deinen Angaben empfehle ich dir:</p>
+            </div>
+            
+            <div class="results-summary" id="resultsSummary">
+                <!-- Filled by JS -->
+            </div>
+            
+            <div class="recommended-plan" id="recommendedPlan">
+                <!-- Filled by JS -->
+            </div>
+            
+            <div class="results-actions">
+                <a href="kontakt.html" class="btn-primary btn-large">Beratung anfragen →</a>
+                <button class="btn-reset" onclick="resetWizard()">Nochmal starten</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="images/logo.svg" alt="mk" height="40">
+                <p>Dein personalisierter Fitness-Guide</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Start</a>
+                <a href="uebersicht.html">Übersicht</a>
+                <a href="ueber-mich.html">Über mich</a>
+                <a href="erfolge.html">Erfolge</a>
+                <a href="faq.html">FAQ</a>
+                <a href="kontakt.html">Kontakt</a>
+            </div>
+            <div class="footer-legal">
+                <a href="impressum.html">Impressum</a>
+                <a href="datenschutz.html">Datenschutz</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 mk. Alle Rechte vorbehalten.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Wizard State
+        let wizardData = {
+            goal: null,
+            frequency: 3,
+            level: null,
+            data: {},
+            equipment: null
+        };
+
+        function updateProgress(step) {
+            const progress = (step / 6) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = step === 6 ? 'Dein Ergebnis' : `Schritt ${step} von 5`;
+        }
+
+        function selectGoal(el, goal) {
+            document.querySelectorAll('.goal-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            wizardData.goal = goal;
+            document.getElementById('btn1').disabled = false;
+        }
+
+        function updateFrequency() {
+            const val = document.getElementById('freqSlider').value;
+            document.getElementById('freqValue').textContent = val;
+            wizardData.frequency = parseInt(val);
+            
+            const hints = {
+                1: '1 Tag pro Woche – besser als nichts!',
+                2: '2 Tage pro Woche – ein guter Einstieg.',
+                3: '3 Tage pro Woche – eine gute Balance.',
+                4: '4 Tage pro Woche – ambitioniert und effektiv.',
+                5: '5 Tage pro Woche – sehr ambitioniert!',
+                6: '6 Tage pro Woche – für wirklich Engagierte.',
+                7: '7 Tage pro Woche – nur für Profis empfehlenswert.'
+            };
+            document.getElementById('freqHint').textContent = hints[val];
+        }
+
+        function selectLevel(el, level) {
+            document.querySelectorAll('.level-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            wizardData.level = level;
+            document.getElementById('btn3').disabled = false;
+        }
+
+        function selectEquipment(el, equipment) {
+            document.querySelectorAll('.equipment-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            wizardData.equipment = equipment;
+            document.getElementById('btn5').disabled = false;
+        }
+
+        function nextStep(current) {
+            // Save data from step 4
+            if (current === 4) {
+                wizardData.data = {
+                    age: document.getElementById('age').value,
+                    weight: document.getElementById('weight').value,
+                    height: document.getElementById('height').value,
+                    gender: document.getElementById('gender').value,
+                    limitations: document.getElementById('limitations').value
+                };
+            }
+            
+            document.getElementById(`step${current}`).classList.remove('active');
+            document.getElementById(`step${current + 1}`).classList.add('active');
+            updateProgress(current + 1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function prevStep(current) {
+            document.getElementById(`step${current}`).classList.remove('active');
+            document.getElementById(`step${current - 1}`).classList.add('active');
+            updateProgress(current - 1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showResults() {
+            document.getElementById('step5').classList.remove('active');
+            document.getElementById('stepResults').classList.add('active');
+            updateProgress(6);
+            
+            // Build summary
+            const goalLabels = { muskelaufbau: 'Muskelaufbau', fettabbau: 'Fettabbau', fitness: 'Fitness' };
+            const levelLabels = { anfaenger: 'Anfänger', fortgeschritten: 'Fortgeschritten', profi: 'Profi' };
+            const equipLabels = { gym: 'Fitnessstudio', home: 'Home Gym', bodyweight: 'Bodyweight' };
+            
+            document.getElementById('resultsSummary').innerHTML = `
+                <div class="summary-item">
+                    <div class="label">Ziel</div>
+                    <div class="value">${goalLabels[wizardData.goal]}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="label">Tage/Woche</div>
+                    <div class="value">${wizardData.frequency}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="label">Level</div>
+                    <div class="value">${levelLabels[wizardData.level]}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="label">Equipment</div>
+                    <div class="value">${equipLabels[wizardData.equipment]}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="label">Plan-Typ</div>
+                    <div class="value">Premium</div>
+                </div>
+            `;
+            
+            // Build recommended plan
+            const plans = {
+                muskelaufbau: {
+                    name: 'Muskelaufbau Premium',
+                    price: '49',
+                    period: 'einmalig',
+                    desc: 'Ein strukturierter 12-Wochen-Plan für maximales Muskelwachstum. Mit progressiver Belastungssteigerung, Übungsvideos und Ernährungsleitfaden.',
+                    features: [
+                        '12-Wochen Trainingsplan',
+                        'Übungsvideos mit Anleitung',
+                        'Makro-Rechner für Ernährung',
+                        'Wochenweise Progression',
+                        'Support via E-Mail'
+                    ]
+                },
+                fettabbau: {
+                    name: 'Fatburn Programm',
+                    price: '39',
+                    period: 'einmalig',
+                    desc: 'Effektives Programm für nachhaltigen Fettabbau mit Kombination aus Cardio- und Krafttraining. Kaloriendefizit strategisch geplant.',
+                    features: [
+                        '8-Wochen Fatburn-Plan',
+                        'HIIT-Einheiten inklusive',
+                        'Kalorienrechner',
+                        'Meal Prep Leitfaden',
+                        'Wöchentliche Check-ins'
+                    ]
+                },
+                fitness: {
+                    name: 'Fitness Grundprogramm',
+                    price: '29',
+                    period: 'einmalig',
+                    desc: 'Ausgewogener Trainingsplan für allgemeine Fitness und Wohlbefinden. Perfekt für den Einstieg ins regelmäßige Training.',
+                    features: [
+                        '8-Wochen Trainingsplan',
+                        'Ganzkörpertraining',
+                        'Flexibility-Übungen',
+                        'Stressmanagement-Tipps',
+                        'Progressionsplan'
+                    ]
+                }
+            };
+            
+            const plan = plans[wizardData.goal];
+            document.getElementById('recommendedPlan').innerHTML = `
+                <span class="plan-badge">Empfohlen für dich</span>
+                <div class="plan-header">
+                    <h3>${plan.name}</h3>
+                    <div class="plan-price">
+                        <span class="price">${plan.price}€</span>
+                        <span class="period">${plan.period}</span>
+                    </div>
+                </div>
+                <p class="plan-description">${plan.desc}</p>
+                <ul class="plan-features">
+                    ${plan.features.map(f => `<li>${f}</li>`).join('')}
+                </ul>
+            `;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetWizard() {
+            wizardData = { goal: null, frequency: 3, level: null, data: {}, equipment: null };
+            document.querySelectorAll('.goal-card, .level-card, .equipment-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('btn1').disabled = true;
+            document.getElementById('btn3').disabled = true;
+            document.getElementById('btn5').disabled = true;
+            document.getElementById('age').value = '';
+            document.getElementById('weight').value = '';
+            document.getElementById('height').value = '';
+            document.getElementById('gender').value = '';
+            document.getElementById('limitations').value = '';
+            document.getElementById('freqSlider').value = 3;
+            updateFrequency();
+            document.getElementById('stepResults').classList.remove('active');
+            document.getElementById('step1').classList.add('active');
+            updateProgress(1);
+        }
+    </script>
+</body>
+</html>
