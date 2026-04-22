@@ -136,6 +136,7 @@
     right: 0;
     bottom: 0;
     z-index: -1;
+    pointer-events: none;
 }
 
 .hero-bg img {
@@ -151,6 +152,7 @@
     right: 0;
     bottom: 0;
     background: linear-gradient(135deg, rgba(15, 15, 26, 0.92) 0%, rgba(26, 26, 46, 0.88) 50%, rgba(15, 15, 26, 0.92) 100%);
+    pointer-events: none;
 }
 
 .hero-content {
@@ -438,24 +440,29 @@ footer {
     .main-nav {
         padding: 0.75rem 1rem;
         padding-top: max(0.75rem, env(safe-area-inset-top));
+        z-index: 1000;
     }
     
     .nav-logo span {
         display: none;
     }
     
+    /* Burger Button - HIGH z-index to stay above all */
     .nav-toggle {
         display: flex;
-        background: var(--bg-glass);
-        border: 2px solid rgba(255, 255, 255, 0.25);
+        position: relative;
+        z-index: 1002;
+        background: rgba(30, 30, 50, 0.95);
+        border: 2px solid rgba(255, 255, 255, 0.3);
         border-radius: 12px;
         padding: 10px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
     
     .nav-toggle:hover {
         border-color: var(--accent);
-        background: rgba(233, 69, 96, 0.2);
+        background: rgba(233, 69, 96, 0.3);
     }
     
     .nav-toggle.active {
@@ -467,70 +474,94 @@ footer {
         background: white;
     }
     
-    .nav-links {
+    /* Menu Overlay Backdrop */
+    .nav-overlay {
+        display: none;
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(180deg, #0f0f1a 0%, #1a1a2e 50%, #0f0f1a 100%);
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1001;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .nav-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+    
+    /* Menu Panel - slides in from right */
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 85%;
+        max-width: 320px;
+        background: var(--bg-dark);
         flex-direction: column;
         justify-content: flex-start;
-        align-items: center;
-        gap: 0;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-20px);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 1001;
+        align-items: stretch;
+        gap: 0.5rem;
         padding: 5rem 1rem 2rem;
         padding-top: max(5rem, calc(env(safe-area-inset-top) + 3rem));
         padding-bottom: max(2rem, env(safe-area-inset-bottom));
+        padding-right: 1.5rem;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
-        border-top: 4px solid var(--accent);
+        transform: translateX(100%);
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1001;
+        border-left: 4px solid var(--accent);
     }
     
     .nav-links.active {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
+        transform: translateX(0);
     }
     
     .nav-links a {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         font-weight: 600;
-        padding: 1.25rem 2rem;
+        padding: 1.1rem 1.5rem;
         color: var(--text);
         text-decoration: none;
-        transition: all 0.3s ease;
-        border-radius: 16px;
-        width: 100%;
-        max-width: 340px;
-        text-align: center;
-        background: rgba(30, 30, 50, 0.8);
-        border: 2px solid rgba(255, 255, 255, 0.15);
+        transition: all 0.25s ease;
+        border-radius: 12px;
+        text-align: left;
+        background: rgba(40, 40, 60, 0.6);
+        border: 2px solid transparent;
         display: flex;
         align-items: center;
-        justify-content: center;
-        margin-bottom: 0.5rem;
+        justify-content: flex-start;
+        margin-bottom: 0.25rem;
         flex-shrink: 0;
     }
     
     .nav-links a:hover,
     .nav-links a:active {
-        background: rgba(233, 69, 96, 0.2);
+        background: rgba(233, 69, 96, 0.25);
         border-color: var(--accent);
         color: var(--accent);
-        transform: scale(1.02);
+        padding-left: 1.75rem;
     }
     
     .nav-links a.active {
         background: var(--accent);
         border-color: var(--accent);
         color: white;
-        font-weight: 600;
-        box-shadow: 0 0 20px rgba(233, 69, 96, 0.4);
+        box-shadow: 0 0 15px rgba(233, 69, 96, 0.35);
+    }
+    
+    /* Ensure page content doesn't shift when menu opens */
+    body.menu-open {
+        overflow: hidden;
+    }
+    
+    body.menu-open .main-nav {
+        z-index: 1001;
     }
     
     /* Hero */
